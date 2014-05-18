@@ -92,10 +92,8 @@ def main():
 
         # Should we configure Sentry?
         if args.sentry_dsn:
-            from raven import Client
             from rq.contrib.sentry import register_sentry
-            client = Client(args.sentry_dsn)
-            register_sentry(client, w)
+            register_sentry(args.sentry_dsn, w)
 
         w.work(burst=args.burst)
     except ConnectionError as e:
