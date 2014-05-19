@@ -50,7 +50,8 @@ def setup_loghandlers_from_args(args):
         level = 'WARNING'
     else:
         level = 'INFO'
-    setup_loghandlers(level)
+
+    setup_loghandlers(level, args.sentry_dsn)
 
 
 def main():
@@ -89,11 +90,6 @@ def main():
                          name=args.name,
                          default_worker_ttl=args.worker_ttl,
                          default_result_ttl=args.results_ttl)
-
-        # Should we configure Sentry?
-        if args.sentry_dsn:
-            from rq.contrib.sentry import register_sentry
-            register_sentry(args.sentry_dsn, w)
 
         w.work(burst=args.burst)
     except ConnectionError as e:
